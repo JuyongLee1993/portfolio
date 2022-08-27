@@ -88,7 +88,7 @@ where dea.continent is not null AND vac.new_vaccinations IS NOT NULL
 select * from Pop_vs_vac
 
 
---temp table
+--temp table, if we want to calcuale different counts
 
 drop table if percentpopulationVaccinate
 create table  percentpopulationVaccinate
