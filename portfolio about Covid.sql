@@ -62,6 +62,7 @@ where continent is not null
 order by 1,2
 
 
+
 --join two tables. Total population vs vaccinations. PARTITION BY LOCATION
 
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
@@ -74,6 +75,7 @@ where dea.continent is not null AND vac.new_vaccinations IS NOT NULL
 order by 2,3
 
 -- try to use CTE)difficult to understand
+
 with Pop_vs_vac (continent,Location, Date, population,new_vaccinations, rolling) as
 (
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
@@ -84,6 +86,27 @@ and dea.date = vac.date
 where dea.continent is not null AND vac.new_vaccinations IS NOT NULL
 )
 select * from Pop_vs_vac
+
+
+--temp table
+
+drop table if exist rollingpercentage
+create table  rollingpercentage
+(
+  continent nvchar(255),
+  location nvchar(255),
+  date datetime
+  population numeric,
+  rolling numeric
+  )
+  
+ insert into rollingpercentage
+select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
+sum(cast(vac.new_vaccinations as bigint)) over (partition by dea.location ORDER BY DEA.LOCATION, DEA.DATE) as rolling
+from myportfolio..deaths dea
+join myportfolio..vaccination vac on dea.location = vac.location and dea.date = vac.date
+and dea.date = vac.date
+
 
 --creating View percentpopulationVaccinated 
 
