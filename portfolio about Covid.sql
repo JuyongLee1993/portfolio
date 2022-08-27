@@ -90,8 +90,8 @@ select * from Pop_vs_vac
 
 --temp table
 
-drop table if exist rollingpercentage
-create table  rollingpercentage
+drop table if percentpopulationVaccinate
+create table  percentpopulationVaccinate
 (
   continent nvchar(255),
   location nvchar(255),
@@ -106,6 +106,8 @@ sum(cast(vac.new_vaccinations as bigint)) over (partition by dea.location ORDER 
 from myportfolio..deaths dea
 join myportfolio..vaccination vac on dea.location = vac.location and dea.date = vac.date
 and dea.date = vac.date
+select *, (rolling/population) * 100
+           from percentpopulationVaccinate
 
 
 --creating View percentpopulationVaccinated 
